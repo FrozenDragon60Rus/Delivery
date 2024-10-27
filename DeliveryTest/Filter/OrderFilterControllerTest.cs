@@ -6,13 +6,13 @@ using Xunit.Abstractions;
 
 namespace DeliveryTest.Filter
 {
-	public class FilteredOrderTest : IDisposable
+	public class OrderFilterControllerTest : IDisposable
 	{
-		private readonly FilteredOrder service;
+		private readonly OrderFilterController service;
 
 		private ITestOutputHelper Output { get; }
 
-		public FilteredOrderTest(ITestOutputHelper output)
+		public OrderFilterControllerTest(ITestOutputHelper output)
 		{
 			Output = output;
 

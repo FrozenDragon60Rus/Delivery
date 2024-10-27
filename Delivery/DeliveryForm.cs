@@ -6,7 +6,7 @@ namespace Delivery
 {
 	public partial class DeliveryForm : Form
 	{
-		readonly FilteredOrder order = new(new OrderContext());
+		readonly OrderFilterController order = new(new OrderContext());
 
 		public DeliveryForm()
 		{
@@ -77,7 +77,7 @@ namespace Delivery
 			View();
 
 			await Log.WriteFilter(
-				Filter.Type.DateTo.ToString(),
+				filter.Type.ToString(),
 				DTPFrom.Value.ToString("yyyy-MM-dd hh:mm:ss")!,
 				DGDelivery.RowCount);
 		}

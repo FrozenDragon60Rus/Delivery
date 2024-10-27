@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace Delivery.Filter
 {
-    internal class FilteredOrder(OrderContext orderContext)
+    internal class OrderFilterController(OrderContext orderContext)
     {
         private readonly OrderContext context = orderContext;
         private List<IFilter> Filter { get; } = [];
