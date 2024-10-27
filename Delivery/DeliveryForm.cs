@@ -31,7 +31,7 @@ namespace Delivery
 		/// <summary>Передаёт список регионов в CheckListBox</summary>
 		private async Task RegionInit()
 		{
-			((ListBox)CLBRegion).DataSource = await new RegionList(new OrderContext()).Get();
+			((ListBox)CLBRegion).DataSource = new RegionList(new OrderContext()).Get();
 
 			await Log.WriteInitSucces();
 		}
@@ -50,6 +50,9 @@ namespace Delivery
 
 		private async void DTPFrom_ValueChanged(object sender, EventArgs e)
 		{
+			if (DTPFrom.Value > DTPTo.Value)
+				DTPFrom.Value = DTPTo.Value;
+
 			//Добавление фильтрации по времени
 			var filter = new DateFromFilter(DTPFrom.Value);
 			order.AddFilter(filter);
@@ -57,7 +60,24 @@ namespace Delivery
 			View();
 
 			await Log.WriteFilter(
-				Filter.Type.Region.ToString(),
+				Filter.Type.DateFrom.ToString(),
+				DTPFrom.Value.ToString("yyyy-MM-dd hh:mm:ss")!,
+				DGDelivery.RowCount);
+		}
+
+		private async void DTPTo_ValueChanged(object sender, EventArgs e)
+		{
+			if (DTPTo.Value < DTPFrom.Value)
+				DTPTo.Value = DTPFrom.Value;
+
+			//Добавление фильтрации по времени
+			var filter = new DateToFilter(DTPTo.Value);
+			order.AddFilter(filter);
+
+			View();
+
+			await Log.WriteFilter(
+				Filter.Type.DateTo.ToString(),
 				DTPFrom.Value.ToString("yyyy-MM-dd hh:mm:ss")!,
 				DGDelivery.RowCount);
 		}
@@ -66,6 +86,7 @@ namespace Delivery
 		{
 			//Сброс к исходному состоянию
 			DTPFrom.Value = DateTime.Now;
+			DTPTo.Value = DateTime.Now;
 			CLBRegion = CLBRegion.Reset();
 			order.RemoveAllFilter();
 

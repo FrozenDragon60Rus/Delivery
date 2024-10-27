@@ -30,6 +30,9 @@
 		{
 			DGDelivery = new DataGridView();
 			panel1 = new Panel();
+			label4 = new Label();
+			label3 = new Label();
+			DTPTo = new DateTimePicker();
 			CLBRegion = new CheckedListBox();
 			ResetButton = new Button();
 			label2 = new Label();
@@ -51,6 +54,9 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(label4);
+			panel1.Controls.Add(label3);
+			panel1.Controls.Add(DTPTo);
 			panel1.Controls.Add(CLBRegion);
 			panel1.Controls.Add(ResetButton);
 			panel1.Controls.Add(label2);
@@ -60,6 +66,35 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(228, 350);
 			panel1.TabIndex = 3;
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Location = new Point(3, 163);
+			label4.Name = "label4";
+			label4.Size = new Size(23, 15);
+			label4.TabIndex = 12;
+			label4.Text = "По";
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new Point(3, 134);
+			label3.Name = "label3";
+			label3.Size = new Size(15, 15);
+			label3.TabIndex = 11;
+			label3.Text = "С";
+			// 
+			// DTPTo
+			// 
+			DTPTo.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+			DTPTo.Format = DateTimePickerFormat.Custom;
+			DTPTo.Location = new Point(32, 157);
+			DTPTo.Name = "DTPTo";
+			DTPTo.Size = new Size(140, 23);
+			DTPTo.TabIndex = 10;
+			DTPTo.Value = new DateTime(2024, 10, 27, 0, 0, 0, 0);
+			DTPTo.ValueChanged += DTPTo_ValueChanged;
 			// 
 			// CLBRegion
 			// 
@@ -73,7 +108,7 @@
 			// 
 			// ResetButton
 			// 
-			ResetButton.Location = new Point(68, 186);
+			ResetButton.Location = new Point(70, 203);
 			ResetButton.Name = "ResetButton";
 			ResetButton.Size = new Size(75, 23);
 			ResetButton.TabIndex = 8;
@@ -103,7 +138,7 @@
 			// 
 			DTPFrom.CustomFormat = "yyyy-MM-dd hh:mm:ss";
 			DTPFrom.Format = DateTimePickerFormat.Custom;
-			DTPFrom.Location = new Point(3, 128);
+			DTPFrom.Location = new Point(32, 128);
 			DTPFrom.Name = "DTPFrom";
 			DTPFrom.Size = new Size(140, 23);
 			DTPFrom.TabIndex = 4;
@@ -134,5 +169,8 @@
 		private Label label2;
 		private Button ResetButton;
 		private CheckedListBox CLBRegion;
+		private Label label4;
+		private Label label3;
+		private DateTimePicker DTPTo;
 	}
 }

@@ -11,6 +11,7 @@ namespace Delivery.Filter
 		Id = 0,
 		Region = 1,
 		DateFrom = 2,
-		Weight = 3
+		DateTo = 3,
+		Weight = 4
 	}
 }

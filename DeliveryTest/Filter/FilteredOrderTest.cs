@@ -1,10 +1,6 @@
 ﻿using Delivery.Filter;
 using Delivery.sql;
-using Delivery.sql.Table;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using Xunit.Abstractions;
 
@@ -21,10 +17,10 @@ namespace DeliveryTest.Filter
 			Output = output;
 
 			//Order setup
-			var MockDBOrder = MockSetup(GetOrderData);
+			var MockDBOrder = Setup.DbSet(Setup.GetOrderData);
 
 			//Region setup
-			var MockDBRegion = MockSetup(GetRegionData);
+			var MockDBRegion = Setup.DbSet(Setup.GetRegionData);
 
 			//Context setup
 			var mockContext = new Mock<OrderContext>();
@@ -34,178 +30,11 @@ namespace DeliveryTest.Filter
 			service = new(mockContext.Object);
 		}
 
-		private DbSet<T> MockSetup<T>(IQueryable<T> data) where T : class
-		{
-			var MockDb = new Mock<DbSet<T>>();
-
-			MockDb.As<IQueryable<T>>()
-				.Setup(o => o.Provider)
-				.Returns(data.Provider);
-			MockDb.As<IQueryable<T>>()
-				.Setup(o => o.Expression)
-				.Returns(data.Expression);
-			MockDb.As<IQueryable<T>>()
-				.Setup(o => o.ElementType)
-				.Returns(data.ElementType);
-			MockDb.As<IQueryable<T>>()
-				.Setup(o => o.GetEnumerator())
-				.Returns(data.GetEnumerator());
-
-			return MockDb.Object;
-		}
-
-		private IQueryable<Order> GetOrderData =>
-			new List<Order> {
-				new()
-				{
-					Id = 1,
-					Weight = 1.1f,
-					RegionId = 1,
-					Date = DateTime.ParseExact(
-						"2024-05-08 14:40:52",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 2,
-					Weight = 2f,
-					RegionId = 2,
-					Date = DateTime.ParseExact(
-						"2023-12-09 09:45:00",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 3,
-					Weight = 5f,
-					RegionId = 3,
-					Date = DateTime.ParseExact(
-						"2024-03-10 23:59:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 4,
-					Weight = 0.1f,
-					RegionId = 3,
-					Date = DateTime.ParseExact(
-						"2024-02-13 01:49:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 5,
-					Weight = 1.3f,
-					RegionId = 3,
-					Date = DateTime.ParseExact(
-						"2023-04-02 23:59:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 6,
-					Weight = 2.4f,
-					RegionId = 2,
-					Date = DateTime.ParseExact(
-						"2024-06-21 23:59:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				}
-			}.AsQueryable();
-
-		private IQueryable<Region> GetRegionData =>
-			new List<Region> {
-				new()
-				{
-					Id = 1,
-					Name = "Москва"
-				},
-				new()
-				{
-					Id = 2,
-					Name = "Санкт-Петербург"
-				},
-				new()
-				{
-					Id = 3,
-					Name = "Псков"
-				}
-			}.AsQueryable();
-
-		private IQueryable<JoinOrder> GetJoinData =>
-			new List<JoinOrder> {
-				new()
-				{
-					Id = 1,
-					Weight = 1.1f,
-					Region = "Москва",
-					Date = DateTime.ParseExact(
-						"2024-05-08 14:40:52",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 2,
-					Weight = 2f,
-					Region = "Санкт-Петербург",
-					Date = DateTime.ParseExact(
-						"2023-12-09 09:45:00",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 3,
-					Weight = 5f,
-					Region = "Псков",
-					Date = DateTime.ParseExact(
-						"2024-03-10 23:59:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 4,
-					Weight = 0.1f,
-					Region = "Псков",
-					Date = DateTime.ParseExact(
-						"2024-02-13 01:49:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 5,
-					Weight = 1.3f,
-					Region = "Псков",
-					Date = DateTime.ParseExact(
-						"2023-04-02 23:59:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				},
-				new()
-				{
-					Id = 6,
-					Weight = 2.4f,
-					Region = "Санкт-Петербург",
-					Date = DateTime.ParseExact(
-						"2024-06-21 23:59:59",
-						"yyyy-MM-dd HH:mm:ss",
-						CultureInfo.InvariantCulture)
-				}
-			}.AsQueryable();
-
 		[Fact]
 		public void GetTest()
 		{
 			var actual = service.Get().ToList();
-			var expected = GetJoinData.ToList();
+			var expected = Setup.GetJoinData.ToList();
 
 			for (int i = 0; i < actual.Count; i++)
 				Assert.Equal(actual[i].ToString(), expected[i].ToString());
@@ -244,6 +73,43 @@ namespace DeliveryTest.Filter
 
 			foreach (var item in actual)
 				Assert.True(item.Date > date);
+
+			Assert.Equal(expected: count, actual.Count);
+		}
+
+		[Theory,
+			InlineData("2025-01-01", 6),
+			InlineData("2024-04-01", 4),
+			InlineData("2023-05-01", 1)]
+		public void FilterByDateBeforeTest(DateTime date, int count)
+		{
+			var filter = new DateToFilter(date);
+			service.AddFilter(filter);
+
+			var actual = service.Get().ToList();
+
+			foreach (var item in actual)
+				Assert.True(item.Date < date);
+
+			Assert.Equal(expected: count, actual.Count);
+		}
+
+		[Theory,
+			InlineData("2020-01-01", "2025-01-01", 6),
+			InlineData("2023-12-01", "2024-03-01", 2),
+			InlineData("2024-03-01", "2024-03-28", 1)]
+		public void FilterInDateRangeTest(DateTime dateFrom, DateTime dateTo, int count)
+		{
+			var filterFrom = new DateFromFilter(dateFrom);
+			service.AddFilter(filterFrom);
+
+			var filterTo = new DateToFilter(dateTo);
+			service.AddFilter(filterTo);
+
+			var actual = service.Get().ToList();
+
+			foreach (var item in actual)
+				Assert.True(item.Date > dateFrom && item.Date < dateTo);
 
 			Assert.Equal(expected: count, actual.Count);
 		}
