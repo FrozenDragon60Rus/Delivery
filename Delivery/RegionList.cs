@@ -1,5 +1,4 @@
-﻿using Delivery.Filter;
-using Delivery.sql;
+﻿using Delivery.sql;
 using Microsoft.EntityFrameworkCore;
 
 namespace Delivery
@@ -12,10 +11,8 @@ namespace Delivery
 		/// 
 		/// </summary>
 		/// <returns>Возвращает список регионов </returns>
-		public async Task<object?> Get()
+		public object? Get()
 		{
-			await Log.WriteDBConnection(context.Database.CanConnect(), "Delivery");
-
 			var region = context.Region;
 			region.Load();
 			var regions = region.Select(r => r.Name).ToList();
