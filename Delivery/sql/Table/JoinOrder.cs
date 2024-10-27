@@ -1,6 +1,6 @@
 ﻿namespace Delivery.sql.Table
 {
-	internal class JoinOrder
+	public class JoinOrder
 	{
 		public int Id { get; set; }	
 		public float Weight { get; set; }
