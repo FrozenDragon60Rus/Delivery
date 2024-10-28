@@ -1,6 +1,7 @@
 ﻿using Delivery.sql;
 using Delivery.sql.Table;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("DeliveryTest")]
@@ -77,20 +78,32 @@ namespace Delivery.Filter
 		/// <summary>Получает данные о заказах </summary>
 		private IQueryable<JoinOrder> Load()
         {
-			context.Order.Load();
-			context.Region.Load();
+            try
+            {
+                context.Order.Load();
+                context.Region.Load();
 
-            var orders = context.Order.Join(context.Region,
-                o => o.RegionId,
-                r => r.Id,
-                (o, r) => new JoinOrder
-                {
-                    Id = o.Id,
-                    Weight = o.Weight,
-                    Region = r.Name,
-                    Date = o.Date
-                });
-            return orders;
+                var orders = context.Order.Join(context.Region,
+                    o => o.RegionId,
+                    r => r.Id,
+                    (o, r) => new JoinOrder
+                    {
+                        Id = o.Id,
+                        Weight = o.Weight,
+                        Region = r.Name,
+                        Date = o.Date
+                    });
+                return orders;
+            }
+            catch
+            {
+                List<JoinOrder> orders = [new JoinOrder() { 
+                    Id = 0,
+                    Date = DateTime.Now,
+                    Weight = 0,
+                    Region = string.Empty}];
+                return orders.AsQueryable();
+            }
         }
 	}
 }

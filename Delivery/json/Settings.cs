@@ -58,8 +58,16 @@ namespace Delivery.json
 		{
 			var DateTimeList = GetDate();
 
-			firstDeliveryDate = DateTimeList.Min() ?? DateTime.MinValue;
-			lastDeliveryDate = DateTimeList.Max() ?? DateTime.MaxValue;
+			try
+			{
+				firstDeliveryDate = DateTimeList.Min() ?? DateTime.MinValue;
+				lastDeliveryDate = DateTimeList.Max() ?? DateTime.MaxValue;
+			}
+			catch
+			{
+				firstDeliveryDate = DateTime.Now;
+				lastDeliveryDate = DateTime.Now;
+			}
 		}
 
 		/// <summary>
@@ -138,8 +146,16 @@ namespace Delivery.json
 			var DateTimeList = GetDate();
 
 			region = [];
-			firstDeliveryDate = DateTimeList.Min() ?? DateTime.MinValue;
-			lastDeliveryDate = DateTimeList.Max() ?? DateTime.MaxValue;
+			try
+			{
+				firstDeliveryDate = DateTimeList.Min() ?? DateTime.MinValue;
+				lastDeliveryDate = DateTimeList.Max() ?? DateTime.MaxValue;
+			}
+			catch
+			{
+				firstDeliveryDate = DateTime.Now;
+				lastDeliveryDate = DateTime.Now;
+			}
 			orderCount = 0;
 
 			Save();
@@ -150,12 +166,20 @@ namespace Delivery.json
 		/// </summary>
 		private IQueryable<DateTime?>? GetDate()
 		{
-			OrderContext context = new();
-			context.Order.Load();
+			try
+			{
+				OrderContext context = new();
+				context.Order.Load();
 
-			var DateTimeList = context.Order.Select(x => x.Date);
+				var DateTimeList = context.Order.Select(x => x.Date);
 
-			return DateTimeList;
+				return DateTimeList;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+				return null;
+			}
 		}
 	}
 }
