@@ -1,4 +1,6 @@
-﻿namespace Delivery
+﻿using System.Diagnostics;
+
+namespace Delivery
 {
 	public static class CheckedListBoxExtension
 	{
@@ -12,28 +14,53 @@
 		}
 
 		/// <summary>Возвращает данные в виде списка List </summary>
-		public static List<T> ToList<T>(this CheckedListBox.CheckedItemCollection collection)
+		public static List<string> ToList(this CheckedListBox.CheckedItemCollection collection)
 		{
-			List<T> items = [];
+			List<string> items = [];
 			
 			foreach (var item in collection)
-				items.Add((T)item);
+				items.Add((string)item);
 
 			return items;
 		}
 
 		/// <summary>Возвращает список выбранных параметров </summary>
-		public static List<T> CheckedItems<T>(this CheckedListBox control, ItemCheckEventArgs e)
+		public static IEnumerable<string> CheckedItems(this CheckedListBox control, ItemCheckEventArgs e)
 		{
-			List<T> items = control.CheckedItems.ToList<T>();
+			List<string> items = control.CheckedItems.ToList();
 
-			var region = (T)control.Items[e.Index];
+			var region = control.Items[e.Index];
 			if (e.NewValue == CheckState.Checked)
-				items.Add(region);
+				items.Add((string)region);
 			else
-				items.Remove(region);
+				items.Remove((string)region);
 
 			return items;
+		}
+
+		/// <summary>Меняет список  </summary>
+		public static void Replace(this CheckedListBox.ObjectCollection items, 
+			IEnumerable<string> newItems)
+		{
+			items.Clear();
+			items.AddRange(newItems.ToArray());
+		}
+
+		public static void SetItemChecked(this CheckedListBox control, IEnumerable<string> items)
+		{
+			int index;
+			foreach (var item in items)
+			{
+				index = control.Items.IndexOf(item); Debug.WriteLine(item);
+				if (index < 0)
+				{
+					var task = Task.Factory.StartNew(async () =>
+							await Log.WriteWrongSettings(item)
+					);
+					continue;
+				}
+				control.SetItemChecked(index, true);
+			}
 		}
 	}
 }
