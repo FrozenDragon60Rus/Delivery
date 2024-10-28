@@ -191,6 +191,8 @@ namespace Delivery
 		private void ReportButton_Click(object sender, EventArgs e)
 		{
 			new Report(order.Get());
+
+			MessageBox.Show("Данные выгружены");
 		}
 	}
 }
