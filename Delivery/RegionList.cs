@@ -7,9 +7,6 @@ namespace Delivery
 	{
 		private readonly OrderContext context = context;
 
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <returns>Возвращает список регионов </returns>
 		public object? Get()
 		{
