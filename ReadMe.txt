@@ -1,4 +1,6 @@
 Проект состоит из приложения WinForm "Delivery" и XUnit тестирования "DeliveryTest"
 В проекте используется Microsoft.Data.SQLite 8.1.0. Для управления БД используется SQLite студио, либо любая другая программа, способная работать с базами SQLite;
 Настройки фильтров сохраняются в формате JSON и загружаются при запуске приложения.
-Файлы с базой данных SQLite (Delivery.db) и файл JSON(settings.json) располагаются в файлах проекта "Delivery", по адресу "..\bin\Debug\net8.0-windows\"
+Отчёт об итогах фильтрации сохраняется в файле "report.json".
+Файлы с базой данных SQLite (Delivery.db) и файлы JSON(settings.json, report.json) располагаются в файлах проекта "Delivery", по адресу "..\bin\Debug\net8.0-windows\"
+Логи располагаются по адресу "..bin\Debug\net8.0-windows\log\"
