@@ -66,7 +66,7 @@ namespace DeliveryTest.Filter
 			InlineData("2024-06-20", 1)]
 		public void FilterByDateFromTest(DateTime date, int count)
 		{
-			var filter = new DateFromFilter(date);
+			var filter = new FirstDeliveryDateFilter(date);
 			service.AddFilter(filter);
 
 			var actual = service.Get().ToList();
@@ -83,7 +83,7 @@ namespace DeliveryTest.Filter
 			InlineData("2023-05-01", 1)]
 		public void FilterByDateBeforeTest(DateTime date, int count)
 		{
-			var filter = new DateToFilter(date);
+			var filter = new LastDeliveryDateFilter(date);
 			service.AddFilter(filter);
 
 			var actual = service.Get().ToList();
@@ -100,10 +100,10 @@ namespace DeliveryTest.Filter
 			InlineData("2024-03-01", "2024-03-28", 1)]
 		public void FilterInDateRangeTest(DateTime dateFrom, DateTime dateTo, int count)
 		{
-			var filterFrom = new DateFromFilter(dateFrom);
+			var filterFrom = new FirstDeliveryDateFilter(dateFrom);
 			service.AddFilter(filterFrom);
 
-			var filterTo = new DateToFilter(dateTo);
+			var filterTo = new LastDeliveryDateFilter(dateTo);
 			service.AddFilter(filterTo);
 
 			var actual = service.Get().ToList();
