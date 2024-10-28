@@ -60,7 +60,7 @@ namespace Delivery
 			View();
 
 			await Log.WriteFilter(
-				Filter.Type.DateFrom.ToString(),
+				filter.Type.ToString(),
 				DTPFrom.Value.ToString("yyyy-MM-dd hh:mm:ss")!,
 				DGDelivery.RowCount);
 		}
@@ -79,6 +79,20 @@ namespace Delivery
 			await Log.WriteFilter(
 				filter.Type.ToString(),
 				DTPFrom.Value.ToString("yyyy-MM-dd hh:mm:ss")!,
+				DGDelivery.RowCount);
+		}
+
+		private async void NOrderCount_ValueChanged(object sender, EventArgs e)
+		{
+			//Добавление фильтрации по количеству заказов
+			var filter = new OrderCountFilter((int)NOrderCount.Value);
+			order.AddFilter(filter);
+
+			View();
+
+			await Log.WriteFilter(
+				filter.Type.ToString(),
+				NOrderCount.Value.ToString()!,
 				DGDelivery.RowCount);
 		}
 

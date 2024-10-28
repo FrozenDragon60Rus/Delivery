@@ -113,6 +113,25 @@ namespace DeliveryTest.Filter
 
 			Assert.Equal(expected: count, actual.Count);
 		}
+		[Theory, 
+			InlineData(1),
+			InlineData(2),
+			InlineData(3)]
+		public void FilterOrderCountTest(int count)
+		{
+			var filter = new OrderCountFilter(count);
+			service.AddFilter(filter);
+
+			var actual = service.Get().ToList();
+
+			List<string> region = [..actual.Select(x => x.Region).Distinct()];
+
+			foreach (var r in region)
+			{
+				Output.WriteLine(r);
+				Assert.True(actual.Where(a => a.Region == r).Count() == count);
+			}
+		}
 
 		[Fact]
 		public void AddFilterTest()

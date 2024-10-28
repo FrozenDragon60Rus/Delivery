@@ -38,8 +38,11 @@
 			label2 = new Label();
 			label1 = new Label();
 			DTPFrom = new DateTimePicker();
+			label5 = new Label();
+			NOrderCount = new NumericUpDown();
 			((System.ComponentModel.ISupportInitialize)DGDelivery).BeginInit();
 			panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)NOrderCount).BeginInit();
 			SuspendLayout();
 			// 
 			// DGDelivery
@@ -54,6 +57,8 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(NOrderCount);
+			panel1.Controls.Add(label5);
 			panel1.Controls.Add(label4);
 			panel1.Controls.Add(label3);
 			panel1.Controls.Add(DTPTo);
@@ -108,7 +113,7 @@
 			// 
 			// ResetButton
 			// 
-			ResetButton.Location = new Point(70, 203);
+			ResetButton.Location = new Point(78, 284);
 			ResetButton.Name = "ResetButton";
 			ResetButton.Size = new Size(75, 23);
 			ResetButton.TabIndex = 8;
@@ -145,6 +150,24 @@
 			DTPFrom.Value = new DateTime(2024, 10, 27, 0, 0, 0, 0);
 			DTPFrom.ValueChanged += DTPFrom_ValueChanged;
 			// 
+			// label5
+			// 
+			label5.AutoSize = true;
+			label5.Location = new Point(3, 197);
+			label5.Name = "label5";
+			label5.Size = new Size(140, 15);
+			label5.TabIndex = 13;
+			label5.Text = "Количество обращений";
+			// 
+			// NOrderCount
+			// 
+			NOrderCount.Location = new Point(3, 215);
+			NOrderCount.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
+			NOrderCount.Name = "NOrderCount";
+			NOrderCount.Size = new Size(169, 23);
+			NOrderCount.TabIndex = 14;
+			NOrderCount.ValueChanged += NOrderCount_ValueChanged;
+			// 
 			// DeliveryForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -157,6 +180,7 @@
 			((System.ComponentModel.ISupportInitialize)DGDelivery).EndInit();
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)NOrderCount).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -172,5 +196,7 @@
 		private Label label4;
 		private Label label3;
 		private DateTimePicker DTPTo;
+		private NumericUpDown NOrderCount;
+		private Label label5;
 	}
 }
