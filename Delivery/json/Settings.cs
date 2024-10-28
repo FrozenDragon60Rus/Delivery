@@ -1,5 +1,9 @@
 ﻿using Delivery.sql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.Logging;
+using System.Diagnostics.Metrics;
+using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 
 namespace Delivery.json
@@ -61,10 +65,26 @@ namespace Delivery.json
 		/// <summary>
 		/// Записывает настройки в файл
 		/// </summary>
-		private void Save()
+		private async void Save()
 		{
-			string jsonString = JsonSerializer.Serialize(this);
-			File.WriteAllText(_settings, jsonString);
+			int count = 0,
+				tryCount = 5;
+
+			do
+			{
+				try
+				{
+					string jsonString = JsonSerializer.Serialize(this);
+					File.WriteAllText(_settings, jsonString);
+					return;
+				}
+				catch (Exception e)
+				{
+					Debug.WriteLine(e.Message);
+					await Task.Delay(500);
+					count++;
+				}
+			} while (count < tryCount);
 		}
 
 		/// <summary>
@@ -77,7 +97,7 @@ namespace Delivery.json
 				if (File.Exists(_settings))
 					return;
 
-				File.Create(_settings);
+				using (var file = File.Create(_settings));
 			}
 			catch(Exception ex)
 			{
@@ -92,11 +112,11 @@ namespace Delivery.json
 		/// </returns>
 		public Settings Load()
 		{
-			string file = File.ReadAllText(_settings);
 			Settings? settings = null;
 
 			try
 			{
+				string file = File.ReadAllText(_settings);
 				settings = JsonSerializer.Deserialize<Settings>(file);
 			}
 			catch(Exception ex) 
