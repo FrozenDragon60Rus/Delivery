@@ -4,3 +4,5 @@
 Отчёт об итогах фильтрации сохраняется в файле "report.json".
 Файлы с базой данных SQLite (Delivery.db) и файлы JSON(settings.json, report.json) располагаются в файлах проекта "Delivery", по адресу "..\bin\Debug\net8.0-windows\"
 Логи располагаются по адресу "..bin\Debug\net8.0-windows\log\"
+
+Для корректной работы необходимо перенести файл Delivery.db из корнейвой папки проекта Delivery, в папку с исполняемыми файлами программы (у меня ..\bin\Debug\net8.0-windows\)
