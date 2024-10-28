@@ -45,6 +45,18 @@ namespace Delivery.Filter
             if (filter.Any())
 				Filter.Remove(filter.Single()); ;  
         }
+        
+        /// <summary>
+        /// Обновляет или удаляет фильтр
+        /// </summary>
+        /// <param name="filter">Обновляемый фильтр</param>
+        public void Update(IFilter filter)
+        {
+			if (filter.IsDefault)
+				RemoveFilter(filter.Type);
+			else
+				AddFilter(filter);
+		}
 
 		/// <summary>Получает данные из БД и фильтрует их (при наличии фильтров)</summary>
         /// <returns>Возвращает отфильтрованные данные</returns>

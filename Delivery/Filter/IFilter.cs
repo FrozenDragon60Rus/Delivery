@@ -9,5 +9,6 @@ namespace Delivery.Filter
 		/// <summary>Выполняет фильтрацию данных</summary>
 		/// <param name="data">данные переданные для фильтрации</param>
 		public IQueryable<JoinOrder> Run(IQueryable<JoinOrder> data);
+		public bool IsDefault { get; }
 	}
 }

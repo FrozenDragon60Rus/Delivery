@@ -6,7 +6,7 @@ namespace Delivery.Filter
 	{
 		public int Count { set; get; } = count;
 
-		public Type Type { get; } = Type.DateTo;
+		public Type Type { get; } = Type.OrderCount;
 
 		public IQueryable<JoinOrder> Run(IQueryable<JoinOrder> data)
 		{
@@ -23,6 +23,7 @@ namespace Delivery.Filter
 
 			return data.Where(d => filtered.Contains(d.Region));
 		}
-
+		public bool IsDefault =>
+			Count == 0;
 	}
 }

@@ -4,8 +4,8 @@
 	{
 		Id = 0,
 		Region = 1,
-		DateFrom = 2,
-		DateTo = 3,
+		FirstDeliveryDate = 2,
+		LastDeliveryDate = 3,
 		Weight = 4,
 		OrderCount = 5
 	}
