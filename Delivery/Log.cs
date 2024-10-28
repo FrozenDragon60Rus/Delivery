@@ -7,22 +7,29 @@ namespace Delivery
     {
         static private readonly string _deliveryOrder = @"log\log.txt";
 		private static string CurrentDateTime => 
-            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
 		static public void Create()
         {
-            var path = Path.GetDirectoryName(_deliveryOrder);
+            try
+            {
+                var path = Path.GetDirectoryName(_deliveryOrder);
 
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path!);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path!);
 
-			using StreamWriter logWriter = new(
-				File.Open(
-                    path: _deliveryOrder, 
-                    FileMode.OpenOrCreate, 
-                    FileAccess.ReadWrite, 
-                    FileShare.Write), 
-                    Encoding.Unicode);
+                using StreamWriter logWriter = new(
+                    File.Open(
+                        path: _deliveryOrder,
+                        FileMode.OpenOrCreate,
+                        FileAccess.ReadWrite,
+                        FileShare.Write),
+                        Encoding.Unicode);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"При создании файла логов произошла ошибка: {ex}");
+            }
 		}
 
         /// <summary>
@@ -32,7 +39,7 @@ namespace Delivery
         /// <param name="value">Параметры фильтрации</param>
         /// <param name="count">Количество полученных записей</param>
         static public async Task WriteFilter(string filter, string value, int count) =>
-            await Write(@$"{CurrentDateTime}: таблица отфильтрована по: {filter} с значением ""{value}""; найдено совпадений: {count}.");
+            await Write(@$"{CurrentDateTime}: таблица отфильтрована по: {filter} с параметром ""{value}""; найдено совпадений: {count}.");
 		/// <summary>
 		/// Запись логов о фильтрации данных
 		/// </summary>
@@ -40,7 +47,7 @@ namespace Delivery
 		/// <param name="value">Параметры фильтрации</param>
 		/// <param name="count">Количество полученных записей</param>
 		static public async Task WriteFilter(string filter, IEnumerable<string> value, int count) =>
-			await Write(@$"{CurrentDateTime}: таблица отфильтрована по: {filter} с значением ""{string.Join(", ", value)}""; найдено совпадений: {count}.");
+			await Write(@$"{CurrentDateTime}: таблица отфильтрована по: {filter} с параметром ""{string.Join(", ", value)}""; найдено совпадений: {count}.");
 		/// <summary>
         /// Запись логов о сбросе фильтрации
         /// </summary>
@@ -58,6 +65,17 @@ namespace Delivery
             if (canConnect) await Write($@"{CurrentDateTime}: cоединение с базой данных {db} успешно устанолено");
             else await Write($@"{CurrentDateTime}: отсутствует подключение к базе данных {db}");
         }
+        /// <summary>
+        /// Запись логов об ошибке загрузки логов
+        /// </summary>
+        /// <param name="param">параметр вызвавший ошибку</param>
+		static public async Task WriteWrongSettings(string param) =>
+			await Write($@"{CurrentDateTime}: Попытка загрузить старые или испорченные настройки с параметром ""{param}""");
+		/// <summary>
+		/// Запись логов об ошибке загрузки логов
+		/// </summary>
+		static public async Task WriteWrongSettings(Exception ex) =>
+			await Write($@"{CurrentDateTime}: Загрузка настроект произошла с ошибкой: {ex.Message}");
 
 		/// <summary>
 		/// Запись логов в файл.
